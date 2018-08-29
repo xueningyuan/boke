@@ -3,7 +3,7 @@ namespace controllers;
 
 use models\User;
 
-class UserControllers{
+class UserController{
     public function hello(){
         $user = new User;
         $name = $user->getName();
@@ -12,4 +12,29 @@ class UserControllers{
             'name'=> $name
         ]);
     }
+
+    public function world(){
+        echo 'world';
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
