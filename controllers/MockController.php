@@ -12,8 +12,8 @@ class MockController
         // 重置id 清空表
         $pdo->exec('TRUNCATE blogs');
         for($i=0;$i<100;$i++){
-            $title = $this->getChar( rand(20,100) ) ;
-            $content = $this->getChar( rand(100,600) );
+            $title = $this->getChar( rand(2,7) ) ;
+            $content = $this->getChar( rand(500,900) );
             $display = rand(10,500);
             $is_show = rand(0,1);
             $date = rand(1233333399,1535592288);
