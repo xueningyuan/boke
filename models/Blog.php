@@ -113,4 +113,11 @@ class Blog{
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
+    public function getDisplays(){
+        $stmt = $this->pdo->query('select display,id from blogs');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function updateDisplays($display,$id){
+        $stmt = $this->pdo->exec("update blogs set display={$display} where id={$id}");
+    }
 }

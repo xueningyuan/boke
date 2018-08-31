@@ -29,17 +29,45 @@ class BlogController{
             'host'   => '127.0.0.1',
             'port'   => 6379,
         ]);
-
+        $blog = new Blog;
         $key = "blog-{$id}";
         if($redis->hexists('blog_displays', $key)){
             $newNum = $redis->hincrby('blog_displays',$key,1);
-            echo $newNum;
+            $blog->updateDisplays($newNum,$id);
+            echo $newNum.'-'.$id;
+            
         }else{
-            $blog = new Blog;
             $display = $blog->getDisplay($id);
             $display++;
             $redis->hset('blog_displays',$key,$display);
             echo $display;
+            $blog->updateDisplays($display,$id);
+        }
+    }
+    public function update_displays(){
+        $redis = new \Predis\Client([
+            'scheme' => 'tcp',
+            'host'   => '127.0.0.1',
+            'port'   => 6379,
+        ]);
+        $blog = new Blog;
+        $displays = $blog->getDisplays();
+
+        for($i=0;$i<count($displays);$i++){
+            $id = $displays[$i]['id'];
+            $key = "blog-{$id}";
+            if($redis->hexists('blog_displays', $key)){
+                $newNum = $redis->hincrby('blog_displays',$key,1);
+                echo $newNum.'+';
+                $blog->updateDisplays($newNum,$id);
+            }else{
+                $blog = new Blog;
+                $display = $blog->getDisplay($id);
+                $display++;
+                $redis->hset('blog_displays',$key,$display);
+                echo $display.'-';
+                $blog->updateDisplays($display,$id);
+            }
         }
     }
 }
