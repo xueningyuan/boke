@@ -20,5 +20,27 @@ class BlogController{
         $blog = new Blog;
         $blog->index2html();
     }
+
+
+    public function update_display(){
+        $id = (int)$_GET['id'];
+        $redis = new \Predis\Client([
+            'scheme' => 'tcp',
+            'host'   => '127.0.0.1',
+            'port'   => 6379,
+        ]);
+
+        $key = "blog-{$id}";
+        if($redis->hexists('blog_displays', $key)){
+            $newNum = $redis->hincrby('blog_displays',$key,1);
+            echo $newNum;
+        }else{
+            $blog = new Blog;
+            $display = $blog->getDisplay($id);
+            $display++;
+            $redis->hset('blog_displays',$key,$display);
+            echo $display;
+        }
+    }
 }
 ?>

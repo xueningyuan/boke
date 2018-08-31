@@ -108,4 +108,9 @@ class Blog{
         file_put_contents(ROOT.'public/index.html',$str);
         ob_clean();
     }
+    public function getDisplay($id){
+        $stmt = $this->pdo->prepare('select display from blogs where id=?');
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
 }
