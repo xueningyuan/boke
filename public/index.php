@@ -9,17 +9,23 @@ function autoload($class){
 }
 spl_autoload_register('autoload');
 //添加路由：解析URL上的路径：控制器/方法
-// 获取URL上的路径
-if(isset($_SERVER['PATH_INFO'])){
-    $pathInfo = $_SERVER['PATH_INFO'];
-    $pathInfo = explode('/',$pathInfo);
-    $controller = ucfirst($pathInfo[1]).'Controller';
-    $action = $pathInfo[2];
+if(php_sapi_name() == 'cli'){
+    $controller = ucfirst($argv[1]).'Controller';
+    $action = $argv[2];
 }else{
-    //默认控制器
-    $controller = 'IndexController';
-    $action = 'index';
+    // 获取URL上的路径
+    if(isset($_SERVER['PATH_INFO'])){
+        $pathInfo = $_SERVER['PATH_INFO'];
+        $pathInfo = explode('/',$pathInfo);
+        $controller = ucfirst($pathInfo[1]).'Controller';
+        $action = $pathInfo[2];
+    }else{
+        //默认控制器
+        $controller = 'IndexController';
+        $action = 'index';
+    }
 }
+
 
 $fullController = 'controllers\\'.$controller;
 $_C = new $fullController;

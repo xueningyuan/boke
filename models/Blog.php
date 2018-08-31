@@ -78,7 +78,7 @@ class Blog{
             'data'=>$data,
         ];
     } 
-    public function conten2html(){
+    public function content2html(){
 
         $stmt = $this->pdo->query('select * from blogs');
         $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
