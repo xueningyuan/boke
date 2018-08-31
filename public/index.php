@@ -44,18 +44,7 @@ function getUrlParams($except = [])
     foreach($except as $v)
     {
         unset($_GET[$v]);
-
-        // unset($_GET['odby']);
-        // unset($_GET['odway']);
     }
-
-    /*
-    $_GET['keyword'] = 'xzb';
-    $_GET['is_show] = 1
-
-    // 拼出：  keyword=abc&is_show=1
-    */
-
     $str = '';
     foreach($_GET as $k => $v)
     {
