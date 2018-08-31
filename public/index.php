@@ -1,4 +1,5 @@
 <?php
+
 // 定义常量
 define('ROOT',dirname(__FILE__).'/../');
 //自动加载类
