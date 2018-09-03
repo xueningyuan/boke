@@ -55,7 +55,7 @@ class UserController
             'host'   => '127.0.0.1',
             'port'   => 6379,
         ]);
-
+        // 收入信息队列
         $redis->lpush('email',$message);
         echo "ok";
     }
