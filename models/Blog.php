@@ -117,7 +117,17 @@ class Blog{
         $stmt = $this->pdo->query('select display,id from blogs');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function updateDisplays($display,$id){
-        $stmt = $this->pdo->exec("update blogs set display={$display} where id={$id}");
+    public function displayToDb(){
+        $redis = new \Predis\Client([
+            'scheme' => 'tcp',
+            'host'   => '127.0.0.1',
+            'port'   => 6379,
+        ]);
+        $data = $redis->hgetall("blog_displays");
+        foreach($data as $k => $v){
+            $id = str_replace("blog-",'',$k);
+            $sql = "update blogs set display={$v} where id ={$id}";
+            $this->pdo->exec($sql);
+        }
     }
 }

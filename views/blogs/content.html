@@ -6,6 +6,24 @@
 </head>
 <body>
     <h1><?=$blog['title']?></h1>
+    <p>浏览量：<span id="display"><?=$blog['display']?></span></p>
     <p><?=$blog['content']?></p>
 </body>
 </html>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    // 更新和获取浏览量
+    var id = "<?=$blog['id']?>";
+    // 访问接口，更新浏览量
+    var url = "/blog/update_display?id="+id;
+    // 请求这个地址
+    $.ajax({
+        type:"get",
+        url:url,
+        success:function(data){
+            $("#display").html(data);
+        }
+
+
+    });
+</script>
