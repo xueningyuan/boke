@@ -96,11 +96,11 @@ class Blog extends Base {
         $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         ob_start();
-        view('index.index',[
+        view('index.index2',[
             'blogs'=>$blogs,
         ]);
         $str = ob_get_contents();
-        file_put_contents(ROOT.'public/index.html',$str);
+        file_put_contents(ROOT.'views/index/index.html',$str);
         ob_clean();
     }
     public function getDisplay($id){
