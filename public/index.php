@@ -68,3 +68,11 @@ function getUrlParams($except = [])
     return $str;
 
 }
+// 配置文件
+function config($name){
+    static $config = null;
+    if($config === null){
+        $config = require(ROOT.'config.php');
+    }
+    return $config[$name];
+}

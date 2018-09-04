@@ -1,9 +1,9 @@
 <?php
 namespace models;
 
+use PDO;
 
-
-class Blog extends Base{
+class Blog extends Base {
     public function search(){
        
 

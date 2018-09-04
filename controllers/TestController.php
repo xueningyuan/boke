@@ -2,7 +2,13 @@
 namespace controllers;
 
 class TestController
-{
+{   
+    public function testLog(){
+        $log = new \libs\Log('email');
+        $log->log( "完成" );
+    }
+
+
     public function testRedis(){
         $client = \libs\Redis::gitInstance();
 

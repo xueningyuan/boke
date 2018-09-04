@@ -8,12 +8,9 @@ class Redis
     private  function __construct(){}
     
     public static function gitInstance(){
+        $config = config('redis');
         if(self::$redis===null){
-            self::$redis = new \Predis\Client([
-                'scheme' => 'tcp',
-                'host'   => '127.0.0.1',
-                'port'   => 6379,
-            ]);
+            self::$redis = new \Predis\Client($config);
         }
         return self::$redis;
     }

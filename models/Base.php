@@ -8,10 +8,12 @@ class Base{
     public static $pdo = null;
     // 数据库链接
     public function __construct(){
+        
        if(self::$pdo===null)
        { 
-        self::$pdo = new PDO("mysql:host=127.0.0.1;dbname=bock",'root','123');
-        self::$pdo->exec('set names utf8');
+        $config = config('db');
+        self::$pdo = new PDO('mysql:host='.$config['host'].';dbname='.$config['dbname'],$config['user'],$config['pass']);
+        self::$pdo->exec('set names '.$config['chaeset']);
         }
     }
 
