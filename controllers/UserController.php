@@ -33,9 +33,9 @@ class UserController
         // 构造信息数组
         $message = [
             'title'=>'欢迎加入全栈一班',
-            'content'=>"点击以下链接进行激活：\r\n 
+            'content'=>"点击以下链接进行激活：\r\n <br>
             <a href='http://localhost:9999/user/active_user?code={$code}'>
-            http://localhost:9999/user/active_user?code={$code}</a>\r\n如果不能点击，请复制地址",
+            http://localhost:9999/user/active_user?code={$code}</a>\r\n<br>如果不能点击，请复制地址",
             'from'=>$from,
         ];
          // 把消息转成字符串(JSON ==> 序列化)
@@ -65,6 +65,10 @@ class UserController
         {
             die('激活码无效！');
         }
+    }
+
+    public function login(){
+        view('users.login');
     }
 
 
