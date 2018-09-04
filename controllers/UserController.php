@@ -50,11 +50,7 @@ class UserController
         ];
          // 把消息转成字符串(JSON ==> 序列化)
          $message = json_encode($message);
-         $redis = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+         $redis = \libs\Redis::gitInstance();
         // 收入信息队列
         $redis->lpush('email',$message);
         echo "ok";

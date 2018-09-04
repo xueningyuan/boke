@@ -1,14 +1,9 @@
 <?php
 namespace models;
 
-use PDO;
 
-class Blog{
-    public $pdo;
-    public function __construct(){
-        $this->pdo = new PDO("mysql:host=127.0.0.1;dbname=bock",'root','123');
-        $this->pdo->exec('set names utf8');
-    }
+
+class Blog extends Base{
     public function search(){
        
 
@@ -55,7 +50,7 @@ class Blog{
         $offset = ($page-1)*$perpage;
         // 制作按钮
         // 总记录数
-        $stmt = $this->pdo->prepare("select count(*) from blogs where $where");
+        $stmt = self::$pdo->prepare("select count(*) from blogs where $where");
         $stmt->execute($value);
         $count = $stmt->fetch(PDO::FETCH_COLUMN);
         $pageCount = ceil( $count / $perpage);
@@ -69,7 +64,7 @@ class Blog{
         }
 
         // 执行sql 
-        $stmt = $this->pdo->prepare("select * from blogs where $where ORDER BY $odby $odway limit $offset,$perpage");
+        $stmt = self::$pdo->prepare("select * from blogs where $where ORDER BY $odby $odway limit $offset,$perpage");
         $stmt->execute($value);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -80,7 +75,7 @@ class Blog{
     } 
     public function content2html(){
 
-        $stmt = $this->pdo->query('select * from blogs');
+        $stmt = self::$pdo->query('select * from blogs');
         $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // 开启缓冲区
         ob_start();
@@ -97,7 +92,7 @@ class Blog{
         }
     }
     public function index2html(){
-        $stmt = $this->pdo->query("select * from blogs where is_show=1 order by id desc limit 20");
+        $stmt = self::$pdo->query("select * from blogs where is_show=1 order by id desc limit 20");
         $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         ob_start();
@@ -109,25 +104,21 @@ class Blog{
         ob_clean();
     }
     public function getDisplay($id){
-        $stmt = $this->pdo->prepare('select display from blogs where id=?');
+        $stmt = self::$pdo->prepare('select display from blogs where id=?');
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
     public function getDisplays(){
-        $stmt = $this->pdo->query('select display,id from blogs');
+        $stmt = self::$pdo->query('select display,id from blogs');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function displayToDb(){
-        $redis = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+        $redis = \libs\Redis::gitInstance();
         $data = $redis->hgetall("blog_displays");
         foreach($data as $k => $v){
             $id = str_replace("blog-",'',$k);
             $sql = "update blogs set display={$v} where id ={$id}";
-            $this->pdo->exec($sql);
+            self::$pdo->exec($sql);
         }
     }
 }

@@ -4,22 +4,14 @@ namespace controllers;
 class TestController
 {
     public function testRedis(){
-        $client = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+        $client = \libs\Redis::gitInstance();
 
         // $client->set('names','predis');
         // echo $client->get('names');
     }
 
     public function register(){
-        $redis = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+        $redis = \libs\Redis::gitInstance();
 
         $data = [
             'email'=>'xueninyuan@126.com',
@@ -35,11 +27,7 @@ class TestController
     public function mail(){
         ini_set('default_socket_timeout',-1);
         echo "程序已启动";
-         $redis = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+         $redis = \libs\Redis::gitInstance();
 
         while(true){
             $data = $redis->brpop("email",0);

@@ -4,16 +4,14 @@ use libs\Mail;
 
 class MailController{
     public function send(){
-        $redis = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+        $redis = \libs\Redis::gitInstance();
 
         $mailer = new Mail;
         // 设置 PHP 永不超时
         ini_set('default_socket_timeout', -1);
         echo "发邮件队列启动成功..\r\n";
+
+        
         while(true){
             // 导出信息队列冰转回数组
             $data = $redis->brpop('email',0);
