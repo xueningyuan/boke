@@ -14,4 +14,13 @@ class Base{
         self::$pdo->exec('set names utf8');
         }
     }
+
+
+
+
+
+
+
+
+
 }
