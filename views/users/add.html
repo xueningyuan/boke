@@ -9,6 +9,7 @@
     <h1>注册</h1>
 
     <form action="/user/store" method="post">
+        <input type="hidden" name="_token" value="<?=csrf()?>">
         <div>
             Email：
             <input type="text" name="email">

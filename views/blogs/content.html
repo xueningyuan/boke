@@ -6,9 +6,9 @@
 </head>
 <body>
     <?php view('common.nav'); ?>
-    <h1><?=$blog['title']?></h1>
+    <h1><?=e($blog['title'])?></h1>
     <p>浏览量：<span id="display"><?=$blog['display']?></span></p>
-    <p><?=$blog['content']?></p>
+    <p><?=hpe($blog['content'])?></p>
     <?php view('common.footer'); ?>
 </body>
 </html>

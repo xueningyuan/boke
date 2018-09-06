@@ -7,8 +7,8 @@
 <body>
     <?php view('common.nav') ?>
     <h1>添加日志</h1>
-
     <form action="/blog/store" method="post">
+        <input type="hidden" name="_token" value="<?=csrf()?>">
         <div>
             标题：
             <input type="text" name="title">
@@ -26,7 +26,6 @@
             <input type="submit" value="发表日志">
         </div>
     </form>
-
     <?php view('common.footer') ?>
 </body>
 </html>

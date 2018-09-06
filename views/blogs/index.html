@@ -28,6 +28,7 @@
             <input type="submit" value="搜索">
         </div>
     </form>
+    <a href="/blog/create">发表日志</a>
     <br>
     <table border="1" width="100%">
         <tr>
@@ -51,14 +52,20 @@
 
         <tr>
             <td><?=$v['id'] ?></td>
-            <td><a href="/contents/<?=$v['id']?>.html"><?=$v['title'] ?></a></td>
+            <td style="word-break: break-all;"><a href="/contents/<?=$v['id']?>.html"><?=e($v['title']) ?></a></td>
             <td><?=$v['created_at'] ?></td>
             <td><?=$v['updated_at'] ?></td>
             <td><?=$v['is_show']==1?'显示':'不显示' ?></td>
             <td><?=$v['display'] ?></td>
             <td>
-                <a href="">修改</a>
-                <a href="">删除</a>
+                <form action="" method="post">
+                    <input type="hidden" name="_token" value="<?=csrf()?>">
+                    <input type="submit" value="修改">
+                </form>
+                <form action="/blog/delete?id=<?=$v['id']?>" method="post">
+                    <input type="hidden" name="_token" value="<?=csrf()?>">
+                    <input type="submit" value="删除">
+                </form>
             </td>
         </tr>
         <?php endforeach; ?>

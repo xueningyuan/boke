@@ -37,7 +37,7 @@ class MockController
             $is_show = rand(0,1);
             $date = rand(1233333399,1535592288);
             $date = date('Y-m-d H:i:s', $date);
-            $user_id = rand(1,20);
+            $user_id = rand(1,21);
             $pdo->exec("INSERT INTO blogs (title,content,display,is_show,created_at,user_id) VALUES('$title','$content',$display,$is_show,'$date',$user_id)");
         }
     }

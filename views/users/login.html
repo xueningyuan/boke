@@ -9,6 +9,7 @@
 
     <h1>登录</h1>
     <form action="/user/dologin" method="post">
+        <input type="hidden" name="_token" value="<?=csrf()?>">
         <div>
             邮件：
             <input type="text" name="email">

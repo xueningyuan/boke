@@ -3,6 +3,9 @@ namespace controllers;
 
 class TestController
 {   
+    public function testPurify(){
+
+    }
     public function testLog(){
         $log = new \libs\Log('email');
         $log->log( "完成" );

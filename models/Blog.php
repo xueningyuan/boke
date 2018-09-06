@@ -4,6 +4,13 @@ namespace models;
 use PDO;
 
 class Blog extends Base {
+    public function delete($id){
+        $stmt = self::$pdo->prepare("delete from blogs where id = ? and user_id=? ");
+        $stmt->execute([
+            $id,
+            $_SESSION['id']
+        ]);
+    }
     public function add($title,$content,$is_show)
     {
         $stmt = self::$pdo->prepare("INSERT INTO blogs(title,content,is_show,user_id) VALUES(?,?,?,?)");
@@ -28,7 +35,7 @@ class Blog extends Base {
     public function search(){
        
 
-        $where = 1;
+        $where = 'user_id ='.$_SESSION['id'];
 
         $value = [];
         if(isset($_GET['keyword']) && $_GET['keyword'] ){
@@ -123,6 +130,10 @@ class Blog extends Base {
         $str = ob_get_contents();
         file_put_contents(ROOT.'public/index.html',$str);
         ob_clean();
+    }
+    public function indexTop20(){
+        $stmt = self::$pdo->query("select * from blogs where is_show=1 order by id desc limit 20");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getDisplay($id){
         $stmt = self::$pdo->prepare('select display from blogs where id=?');
