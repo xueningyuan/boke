@@ -33,9 +33,10 @@ class Blog extends Base {
         return self::$pdo->lastInsertId();
     }
     public function search(){
-       
+        
+        $id = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
 
-        $where = 'user_id ='.$_SESSION['id'];
+        $where = 'user_id ='.$id;
 
         $value = [];
         if(isset($_GET['keyword']) && $_GET['keyword'] ){
