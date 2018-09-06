@@ -11,4 +11,21 @@ class User extends Base{
             $password,
         ]);
     }
+    public function login($email,$password){
+        $stmt = self::$pdo->prepare("select * from users where email=? and password=? ");
+        $stmt->execute([
+            $email,
+            $password,
+        ]);
+        $user = $stmt->fetch();
+        if($user){
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

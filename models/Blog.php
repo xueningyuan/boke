@@ -4,6 +4,27 @@ namespace models;
 use PDO;
 
 class Blog extends Base {
+    public function add($title,$content,$is_show)
+    {
+        $stmt = self::$pdo->prepare("INSERT INTO blogs(title,content,is_show,user_id) VALUES(?,?,?,?)");
+        $ret = $stmt->execute([
+            $title,
+            $content,
+            $is_show,
+            $_SESSION['id'],
+        ]);
+        if(!$ret)
+        {
+            echo '失败';
+            // 获取失败信息
+            $error = $stmt->errorInfo();
+            echo '<pre>';
+            var_dump( $error); 
+            exit;
+        }
+        // 返回新插入的记录的ID
+        return self::$pdo->lastInsertId();
+    }
     public function search(){
        
 
@@ -96,11 +117,11 @@ class Blog extends Base {
         $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         ob_start();
-        view('index.index2',[
+        view('index.index',[
             'blogs'=>$blogs,
         ]);
         $str = ob_get_contents();
-        file_put_contents(ROOT.'views/index/index.html',$str);
+        file_put_contents(ROOT.'public/index.html',$str);
         ob_clean();
     }
     public function getDisplay($id){

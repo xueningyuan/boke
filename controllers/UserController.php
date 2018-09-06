@@ -6,9 +6,11 @@ use models\User;
 
 class UserController
 {
+    // 注册页面
     public function register(){
         view('users.add');
     }
+    // 注册
     public function store(){
         $email = $_POST['email'];
         $password = md5($_POST['password']);
@@ -35,7 +37,7 @@ class UserController
             'title'=>'欢迎加入全栈一班',
             'content'=>"点击以下链接进行激活：\r\n <br>
             <a href='http://localhost:9999/user/active_user?code={$code}'>
-            http://localhost:9999/user/active_user?code={$code}</a>\r\n<br>如果不能点击，请复制地址",
+            http://localhost:9999/user/active_user?code={$code}\r\n<br></a>如果不能点击，请复制地址",
             'from'=>$from,
         ];
          // 把消息转成字符串(JSON ==> 序列化)
@@ -45,7 +47,7 @@ class UserController
         $redis->lpush('email',$message);
         echo "ok";
     }
-
+    // 激活
     public function active_user(){
         $code = $_GET['code'];
         $redis = \libs\redis::gitInstance();
@@ -66,10 +68,34 @@ class UserController
             die('激活码无效！');
         }
     }
-
+    // 登陆页面
     public function login(){
         view('users.login');
     }
+    // 登陆
+    public function dologin(){
+        $email = $_POST['email'];
+        $password =md5($_POST['password']);
+
+        $user = new User;
+        if($user->login($email,$password)){
+            message('登录成功！', 2, '/blog/index');
+        }
+        else
+        {
+            message('账号或者密码错误', 1, '/user/login');
+        }
+
+    }
+
+    public function logout()
+        {
+            // 清空 SESSION
+            $_SESSION = [];
+    
+            // 跳转
+            message('退出成功', 2, '/');
+        }
 
 
 
