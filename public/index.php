@@ -6,12 +6,12 @@ ini_set('session.save_path', 'tcp://127.0.0.1:6379?database=15');  // 设置 red
 session_start();
 
 // 如果用户以POST方式访问网站时，需要验证 csrf令牌
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    if(!isset($_POST['_token']))
-        die('违规操作');
-    if($_POST['_token'] != $_SESSION['token'])
-        die('违规操作');
-}
+// if($_SERVER['REQUEST_METHOD'] == 'POST'){
+//     if(!isset($_POST['_token']))
+//         die('违规操作');
+//     if($_POST['_token'] != $_SESSION['token'])
+//         die('违规操作');
+// }
 
 
 
@@ -44,6 +44,7 @@ if(php_sapi_name() == 'cli'){
         $action = 'index';
     }
 }
+
 
 
 $fullController = 'controllers\\'.$controller;

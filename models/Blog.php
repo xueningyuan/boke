@@ -4,6 +4,39 @@ namespace models;
 use PDO;
 
 class Blog extends Base {
+    public function update($title,$content,$is_show,$id){
+        $stmt = self::$pdo->prepare("update blogs set title=?,content=?,is_show=? where id=?");
+        $ret = $stmt->execute([
+            $title,
+            $content,
+            $is_show,
+            $id,
+        ]);
+    } 
+    // 单独生成静态页面
+    public function makeHtml($id){
+       $blog = $this->find($id);
+       ob_start();
+           view('blogs.content',[
+               'blog'=>$blog,
+           ]);
+           // 取出缓存区内容
+           $str = ob_get_clean();
+           // 输出到文件中
+           file_put_contents(ROOT.'public/contents/'.$id.'.html',$str);
+    }
+    // 删除一个静态页
+    public function deleteHtml($id){
+        @unlink(ROOT.'public/contents/'.$id.'.html');
+    }
+
+    public function find($id){
+        $stmt = self::$pdo->prepare('select * from blogs where id =?');
+        $stmt->execute([
+            $id
+        ]);
+        return $stmt->fetch();
+    }
     public function delete($id){
         $stmt = self::$pdo->prepare("delete from blogs where id = ? and user_id=? ");
         $stmt->execute([

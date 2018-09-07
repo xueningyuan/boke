@@ -58,18 +58,22 @@
 
         <tr>
             <td><?=$v['id'] ?></td>
-            <td style="word-break: break-all;"><a href="/contents/<?=$v['id']?>.html"><?=e($v['title']) ?></a></td>
+            <td style="word-break: break-all;">
+            <?php if($v['is_show']==1): ?>
+                <a href="/contents/<?=$v['id']?>.html"><?=e($v['title']) ?></a>
+            <?php else: ?>
+            <a href="/blog/content?id=<?=$v['id']?>"><?=e($v['title']) ?></a>
+            <?php endif; ?>
+            </td>
             <td><?=$v['created_at'] ?></td>
             <td><?=$v['updated_at'] ?></td>
             <td><?=$v['is_show']==1?'显示':'不显示' ?></td>
             <td><?=$v['display'] ?></td>
             <td>
-                <form action="" method="post">
+                <a href="/blog/edit?id=<?=$v['id']?>">修改</a>
+                <form action="/blog/delete" method="post">
                     <input type="hidden" name="_token" value="<?=csrf()?>">
-                    <input type="submit" value="修改">
-                </form>
-                <form action="/blog/delete?id=<?=$v['id']?>" method="post">
-                    <input type="hidden" name="_token" value="<?=csrf()?>">
+                    <input type="hidden" name="id" value="<?=$v['id']?>">
                     <input type="submit" value="删除">
                 </form>
             </td>

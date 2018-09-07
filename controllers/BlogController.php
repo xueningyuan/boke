@@ -5,10 +5,46 @@ use models\Blog;
 
 class BlogController{
 
+    public function content(){
+        $id = $_GET['id'];
+        $blog = new Blog;
+        $data = $blog->find($id);
+        if($_SESSION['id']!=$data['user_id']){
+            die('无权访问');
+        }
+        view('blogs.content',[
+            'blog'=>$data
+        ]);
+    }
+    public function update(){
+        $id = $_POST['id'];
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+        $is_show = $_POST['is_show'];
+
+        $blog = new Blog;
+        $data = $blog->update($title,$content,$is_show,$id);
+        if($is_show == 1){
+            $blog->makeHtml($id);
+        }else{
+            $blog->deleteHtml($id);
+        }
+        message('修改成功', 2, '/blog/index');
+    }
+
+    public function edit(){
+        $id = $_GET['id'];
+        $blog = new Blog;
+        $data = $blog->find($id);
+        view('blogs.edit',[
+            'data'=>$data
+        ]);
+    }
     public function delete(){
         $id = $_POST['id'];
         $blog = new Blog;
         $blog->delete($id);
+        $blog->deleteHtml($id);
         message('删除成功', 2, '/blog/index');
 
     }
@@ -23,7 +59,10 @@ class BlogController{
         $content = $_POST['content'];
         $is_show = $_POST['is_show'];
         $blog = new Blog;
-        $blog->add($title,$content,$is_show);
+        $id = $blog->add($title,$content,$is_show);
+        if($is_show == 1){
+            $blog->makeHtml($id);
+        }
         // 跳转
         message('发表成功', 2, '/blog/index');
     }
@@ -46,23 +85,15 @@ class BlogController{
 
     public function update_display(){
         $id = (int)$_GET['id'];
-        $redis = new \Predis\Client([
-            'scheme' => 'tcp',
-            'host'   => '127.0.0.1',
-            'port'   => 6379,
-        ]);
+
         $blog = new Blog;
-        $key = "blog-{$id}";
-        if($redis->hexists('blog_displays', $key)){
-            $newNum = $redis->hincrby('blog_displays',$key,1);
-            echo $newNum;
-            
-        }else{
-            $display = $blog->getDisplay($id);
-            $display++;
-            $redis->hset('blog_displays',$key,$display);
-            echo $display;
-        }
+
+        $display = $blog->getDisplay($id);
+
+        echo json_encode([
+            'display' => $display,
+            'email' => isset($_SESSION['email']) ? $_SESSION['email'] : ''
+        ]);
     }
 
     public function displayToDb(){

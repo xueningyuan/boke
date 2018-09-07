@@ -5,9 +5,10 @@
     <title><?=$blog['title']?></title>
 </head>
 <body>
-    <?php view('common.nav'); ?>
+    <h1>知鸟系统</h1>
+    <div id="menu"></div>
     <h1><?=e($blog['title'])?></h1>
-    <p>浏览量：<span id="display"><?=$blog['display']?></span></p>
+    <p>浏览量：<span id="display"></span></p>
     <p><?=hpe($blog['content'])?></p>
     <?php view('common.footer'); ?>
 </body>
@@ -15,6 +16,7 @@
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script>
     // 更新和获取浏览量
+    // 静态获取登陆状态
     var id = "<?=$blog['id']?>";
     // 访问接口，更新浏览量
     var url = "/blog/update_display?id="+id;
@@ -22,10 +24,25 @@
     $.ajax({
         type:"get",
         url:url,
+        dataType:'json',
         success:function(data){
-            $("#display").html(data);
+            $("#display").html(data.display);
+            var html = '<a href="/">首页</a>';
+            if(data.email == '')
+        {
+            // js 中定义多行字符串时要使用 ` （反引号 1左边的键子）
+            html += ` <a href="/user/register">注册</a> 
+                      <a href="/user/login">登录</a>`;
         }
-
-
+        else
+        {
+            html +=` <a href="/blog/index">日志列表</a> 
+                      <a href="/blog/create">发表日志</a>  `
+                      +data.email+` <a href="/user/login">退出</a>`;
+        }
+            $("#menu").html(html);
+        }
     });
+
+
 </script>
