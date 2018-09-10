@@ -1,6 +1,7 @@
 <?php
 namespace models;
 
+use PDO;
 
 
 class User extends Base{
@@ -28,4 +29,54 @@ class User extends Base{
             return false;
         }
     }
+
+    // 为用户增加金额
+    public function addMoney($money, $userId)
+    {
+        $stmt = self::$pdo->prepare("UPDATE users SET money=money+? WHERE id=?");
+        $stmt->execute([
+            $money,
+            $userId
+        ]);
+
+        // // 更新 Redis
+        // $redis = \libs\Redis::gitInstance();
+
+        // // 拼出 redis 中的键
+        // $key = 'user_money:'.$userId;
+
+        // // 增加余额
+        // $ret = $redis->incrby($key, $money);
+
+        // echo $ret;
+    }
+    // 获取余额
+    public function getMoney(){
+        $id = $_SESSION['id'];
+        // $redis = \libs\Redis::gitInstance();
+        // $key = 'user_money:'.$id;
+
+        // $money = $redis->get($key);
+        // if($money){
+        //     return $money;
+        // }else{
+            $stmt = self::$pdo->prepare('select money from users where id = ?');
+            $stmt->execute([$id]);
+            $money = $stmt->fetch(PDO::FETCH_COLUMN);
+            // $redis->set($key,$money);
+            return $money;
+        // }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

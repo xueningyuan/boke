@@ -3,8 +3,12 @@ namespace controllers;
 
 class TestController
 {   
-    public function testPurify(){
-        
+    public function testaddMondey(){
+        $user = new \models\User;
+        $user->addMoney(2,21);
+
+        // $dara = $user->getMoney();
+        // echo $dara;
     }
     public function testLog(){
         $log = new \libs\Log('email');
