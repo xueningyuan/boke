@@ -6,8 +6,12 @@
 </head>
 <body>
         <?php view('common.nav'); ?>
+    <?php if(!isset($_SESSION['id'])): ?>
+    <tr>
+        <td colspan="7"><h3 style="text-align: center;color: skyblue;">请先<a href="/user/login">登录</a>再进行充值</h3></td>
+    </tr>
+    <?php else: ?>
     <h1>充值</h1>
-
     <form action="/user/docharge" method="post">
         <input type="hidden" name="_token" value="<?=csrf()?>">
         <div>
@@ -18,6 +22,7 @@
             <input type="submit" value="充值">
         </div>
     </form>
+    <?php endif; ?>
     <?php view('common.footer'); ?>
 </body>
 </html>

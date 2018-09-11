@@ -18,7 +18,7 @@ class Order extends Base{
     public function search()
     {
         // 取出当前用户的订单
-        $where = 'user_id='.$_SESSION['id'];
+        @$where = 'user_id='.$_SESSION['id'];
 
         /***************** 排序 ********************/
         // 默认排序
@@ -79,7 +79,14 @@ class Order extends Base{
     public function setPaid($sn)
     {
         $stmt = self::$pdo->prepare("UPDATE orders SET status=1,pay_time=now() WHERE sn=?");
-        $stmt->execute([
+        return $stmt->execute([
+            $sn
+        ]);
+    }
+    public function setpayout($sn)
+    {
+        $stmt = self::$pdo->prepare("UPDATE orders SET status=2,pay_time=now() WHERE sn=?");
+        return $stmt->execute([
             $sn
         ]);
     }

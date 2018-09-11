@@ -1,3 +1,5 @@
+<script src="/js/jquery-3.3.1.min.js"></script>
+
 <?php if(isset($_SESSION['_MESS_'])): ?>
 <div id="_mess_" style="border: 1px solid #25b952;background-color:#b9ecbd;padding:5px;">
     <?=$_SESSION['_MESS_']?>
@@ -27,12 +29,17 @@ var si = setInterval(function(){
 <?php if( isset($_SESSION['id']) ): ?>
 
     <?=$_SESSION['email']?>
-    （ <span style="color:#F00;font-weight:bold;">
-        <?php
-            $user = new \models\User;
-            echo $user->getMoney();
-        ?>
-    </span> 元）
+    （ <span id="span-money" style="color:#F00;font-weight:bold;">
+        <?=$_SESSION['money']; ?> </span> 元 
+
+    <input id="update-money" type="button" value="更新余额">
+
+    <script>
+        $("#update-money").click(function(){
+            $("#span-money").load("/user/money");
+        });
+    </script>
+    ）
     <a href="/user/logout">退出</a>
 
 <?php else: ?>

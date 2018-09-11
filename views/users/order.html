@@ -6,6 +6,11 @@
 </head>
 <body>
     <?php view('common.nav') ?>
+    <?php if(!isset($_SESSION['id'])): ?>
+    <tr>
+        <td colspan="7"><h3 style="text-align: center;color: skyblue;">请先<a href="/user/login">登录</a>再查看订单</h3></td>
+    </tr>
+    <?php else: ?>
 
     <h1>订单列表</h1>
     <table border="1" width="100%">
@@ -18,6 +23,7 @@
             <th>支付时间</th>
             <th>操作</th>
         </tr>
+
         <?php foreach($data as $v): ?>
         <tr>
             <td><?=$v['id']?></td>
@@ -34,9 +40,18 @@
                     <input type="submit" value="点击支付">
                 </form>
                 <?php endif; ?>
+                <?php if($v['status']==1): ?>
+                <form target="_blank" action="/alipay/refund" method="post">
+                    <?=csrf_field()?>
+                    <input type="hidden" name="sn" value="<?=$v['sn']?>">
+                    <input type="hidden" name="money" value="<?=$v['money']?>">
+                    <input type="submit" value="点击退款">
+                </form>
+                <?php endif; ?>
             </td>
         </tr>
         <?php endforeach; ?>
+        <?php endif; ?>
     </table>
     <br>
     <?=$btns?>

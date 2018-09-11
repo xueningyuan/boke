@@ -6,7 +6,12 @@ use models\User;
 use models\Order;
 
 class UserController
-{
+{   
+    public function money()
+    {
+        $user = new User;
+        echo $user->getMoney();
+    }
     public function charge(){
         view('users.charge');
     }
@@ -52,8 +57,8 @@ class UserController
         $message = [
             'title'=>'欢迎加入全栈一班',
             'content'=>"点击以下链接进行激活：\r\n <br>
-            <a href='http://localhost:9999/user/active_user?code={$code}'>
-            http://localhost:9999/user/active_user?code={$code}\r\n<br></a>如果不能点击，请复制地址",
+            <a href='http://xue.tunnel.echomod.cn/user/active_user?code={$code}'>
+            http://xue.tunnel.echomod.cn/user/active_user?code={$code}\r\n<br></a>如果不能点击，请复制地址",
             'from'=>$from,
         ];
          // 把消息转成字符串(JSON ==> 序列化)
@@ -61,7 +66,8 @@ class UserController
          $redis = \libs\Redis::gitInstance();
         // 收入信息队列
         $redis->lpush('email',$message);
-        echo "ok";
+        message('邮件发送成功！', 1, '/user/login');
+
     }
     // 激活
     public function active_user(){

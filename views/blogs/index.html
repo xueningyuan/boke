@@ -13,6 +13,11 @@
 </head>
 <body>
         <?php view('common.nav'); ?>
+        <?php if(!isset($_SESSION['id'])): ?>
+        <tr>
+            <td colspan="7"><h3 style="text-align: center;color: skyblue;">请先<a href="/user/login">登录</a>再查看日志</h3></td>
+        </tr>
+        <?php else: ?>
     <h1>日志列表</h1>
     <form>
         <div>
@@ -48,11 +53,6 @@
             </th>
             <th>操作</th>
         </tr>
-        <?php if(!isset($_SESSION['id'])): ?>
-        <tr>
-            <td colspan="7"><h3 style="text-align: center;color: skyblue;">请先<a href="/user/login">登录</a>再查看日志</h3></td>
-        </tr>
-        <?php else: ?>
         
         <?php foreach($data as $v): ?>
 

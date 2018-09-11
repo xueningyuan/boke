@@ -22,6 +22,7 @@ class User extends Base{
         if($user){
             $_SESSION['id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
+            $_SESSION['money'] = $user['money'];
             return true;
         }
         else
@@ -34,41 +35,31 @@ class User extends Base{
     public function addMoney($money, $userId)
     {
         $stmt = self::$pdo->prepare("UPDATE users SET money=money+? WHERE id=?");
-        $stmt->execute([
+        return $stmt->execute([
             $money,
             $userId
         ]);
 
-        // // 更新 Redis
-        // $redis = \libs\Redis::gitInstance();
+    }
+    public function abbMoney($money, $userId)
+    {
+        $stmt = self::$pdo->prepare("UPDATE users SET money=money-? WHERE id=?");
+        return $stmt->execute([
+            $money,
+            $userId
+        ]);
 
-        // // 拼出 redis 中的键
-        // $key = 'user_money:'.$userId;
-
-        // // 增加余额
-        // $ret = $redis->incrby($key, $money);
-
-        // echo $ret;
     }
     // 获取余额
     public function getMoney(){
         $id = $_SESSION['id'];
-        // $redis = \libs\Redis::gitInstance();
-        // $key = 'user_money:'.$id;
+        $stmt = self::$pdo->prepare('select money from users where id = ?');
+        $stmt->execute([$id]);
+        $money = $stmt->fetch(PDO::FETCH_COLUMN);
+        $_SESSION['money']=$money;
+        return $money;
 
-        // $money = $redis->get($key);
-        // if($money){
-        //     return $money;
-        // }else{
-            $stmt = self::$pdo->prepare('select money from users where id = ?');
-            $stmt->execute([$id]);
-            $money = $stmt->fetch(PDO::FETCH_COLUMN);
-            // $redis->set($key,$money);
-            return $money;
-        // }
     }
-
-
 
 
 

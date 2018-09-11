@@ -17,6 +17,18 @@ class Base{
         }
     }
 
+    public function startTrans(){
+        self::$pdo->exec('start transaction');
+    }
+    public function commit(){
+        self::$pdo->exec('commit');
+    }
+    public function rollback(){
+        self::$pdo->exec('rollback');
+    }
+
+
+
 
 
 

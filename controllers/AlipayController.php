@@ -67,9 +67,17 @@ class AlipayController
                 $order = new \models\Order;
                 $orderInfo = $order->findBySn($data->out_trade_no);
                 if($orderInfo['status']==0){
-                    $order->setPaid($data->out_trade_no);
+                    $order->startTrans();
+                    $ret1 = $order->setPaid($data->out_trade_no);
+                    
                     $user = new \models\User;
-                    $user->addMoney($orderInfo['money'],$orderInfo['user_id']);
+                    $ret2 = $user->addMoney($orderInfo['money'],$orderInfo['user_id']);
+                    
+                    if($ret1 && $ret2){
+                        $order->commit();
+                    }else{
+                        $order->rollback();
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -83,13 +91,15 @@ class AlipayController
     // 退款
     public function refund()
     {
+        $sn = $_POST['sn'];
+        $money = $_POST['money'];
         // 生成唯一退款订单号（以后使用这个订单号，可以到支付宝中查看退款的流程）
         $refundNo = md5( rand(1,99999) . microtime() );
 
         try{
             $order = [
-                'out_trade_no' => '258288906674368512',    // 退款的本地订单号
-                'refund_amount' => 0.01,              // 退款金额，单位元
+                'out_trade_no' => $sn,    // 退款的本地订单号
+                'refund_amount' => $money,              // 退款金额，单位元
                 'out_request_no' => $refundNo,     // 生成 的退款订单号
             ];
 
@@ -98,11 +108,24 @@ class AlipayController
 
             if($ret->code == 10000)
             {
-                echo '退款成功！';
+                
+                $order->startTrans();
+
+                $orders = new \models\Order;
+                $ret1 = $orders->setpayout($sn);
+                $user = new \models\User;
+                $ret2 = $user->abbMoney($money,$_SESSION['id']);
+
+                if($ret1 && $ret2){
+                    $order->commit();
+                }else{
+                    $order->rollback();
+                }
+                echo '退款成功！信息更新成功';    
             }
             else
             {
-                echo '失败' ;
+                echo '信息更新失败' ;
                 var_dump($ret);
             }
         }
