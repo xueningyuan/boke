@@ -15,18 +15,18 @@
     <h1>订单列表</h1>
     <table border="1" width="100%">
         <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
             <th>订单编号</th>
             <th>总金额</th>
             <th>下单时间</th>
             <th>订单状态</th>
-            <th>支付时间</th>
+            <th>支付(退款)时间</th>
             <th>操作</th>
         </tr>
 
         <?php foreach($data as $v): ?>
         <tr>
-            <td><?=$v['id']?></td>
+            <!-- <td><?=$v['id']?></td> -->
             <td><?=$v['sn']?></td>
             <td><?=$v['money']?></td>
             <td><?=$v['created_at']?></td>
