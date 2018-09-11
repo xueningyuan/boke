@@ -2,6 +2,7 @@
 namespace controllers;
 
 use Yansongda\Pay\Pay;
+use Endroid\QrCode\QrCode;
 
 class WxpayController
 {
@@ -11,7 +12,7 @@ class WxpayController
         'key' => '8934e7d15453e97507ef794cf7b0519d',
 
         // 通知的地址
-        'notify_url' => 'http://requestbin.fullcontact.com/r6s2a1r6',
+        'notify_url' => 'http://xue.tunnel.echomod.cn/wxpay/notify',
     ];
 
     // 调用微信接口进行支付
@@ -27,11 +28,12 @@ class WxpayController
         $pay = Pay::wechat($this->config)->scan($order);
 
         // 打印返回值 
-        echo $pay->return_code , '<hr>';
-        echo $pay->return_msg , '<hr>';
-        echo $pay->appid , '<hr>';
-        echo $pay->result_code , '<hr>';
-        echo $pay->code_url , '<hr>';     // 支付码
+        // echo $pay->return_code , '<hr>';
+        // echo $pay->return_msg , '<hr>';
+        // echo $pay->appid , '<hr>';
+        // echo $pay->result_code , '<hr>';
+        // echo $pay->code_url , '<hr>';     // 支付码
+        self::qrcode($pay->code_url);
     }
 
     public function notify()
@@ -53,4 +55,22 @@ class WxpayController
         
         $pay->success()->send();
     }
+    // 二维码
+    public function qrcode($imgs)
+    {
+        $qrCode = new QrCode($imgs);
+        header('Content-Type: '.$qrCode->getContentType());
+        echo $qrCode->writeString();
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
