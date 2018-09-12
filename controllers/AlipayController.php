@@ -54,6 +54,8 @@ class AlipayController
         echo '<h1>支付成功！</h1> <hr>';
 
         var_dump( $data->all() );
+        sleep(3);
+        echo '<script>window.close();</script>';
 
     }
     // 接收支付完成的通知

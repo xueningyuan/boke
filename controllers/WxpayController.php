@@ -30,7 +30,7 @@ class WxpayController
             // 调用微信接口
             $ret = Pay::wechat($this->config)->scan([
                 'out_trade_no' => $data['sn'],
-                'total_fee' => ($data['money'] * 100)*1, // 单位：分
+                'total_fee' => intval($data['money'] * 100), // 单位：分
                 'body' => '智聊系统用户充值 ：'.$data['money'].'元',
             ]);
 
