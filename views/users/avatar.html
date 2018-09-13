@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+        <?php view('common.nav'); ?>
+    <h1>设置头像</h1>
+
+    <form action="/user/setavatar" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="<?=csrf()?>">
+        <div>
+            选择头像：
+            <input id="img" type="file" name="avatar">
+        </div>
+        <div>
+            <input type="submit" value="设置头像">
+        </div>
+    </form>
+    <?php view('common.footer'); ?>
+</body>
+</html>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script>
+    var img = document.getElementById('img');
+    img.onchange = function(){
+        var img1 = this.files[0];
+        var fileSize = img1.size;
+        //每块的尺寸
+        var perSize = 4096; //4k
+        var count = Math.ceil(fileSize/perSize);
+        var name = "img_"+Math.random(1,99999);
+
+        for(var i=0;i<count;i++){
+           var img0 = img1.slice(i*perSize,i*perSize+i+perSize)
+           var f = new FormData()
+           f.append('img',img0)
+           f.append('count',count)
+           f.append('i',i)
+           f.append('size',perSize)
+           f.append('img_name',name)
+           $.ajax({
+               type:"POST",
+               url:"/user/uploadbig",
+               data:f,
+               contentType:false,
+               processData:false,
+               success:function(data){
+
+               }
+           });
+        }
+
+    }
+</script>

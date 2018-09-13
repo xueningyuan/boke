@@ -7,6 +7,66 @@ use models\Order;
 
 class UserController
 {   
+    public function uploadbig(){
+        $count = $_POST['count'];
+        $i = $_POST['i'];
+        $size = $_POST['size'];
+        $name = 'big_img_'.$_POST['img_name'];
+
+        $img = $_FILES['img'];
+        $url = ROOT.'tmp/'.$_SESSION['id'].'/';
+        if(!is_dir($url))
+        {
+            // 创建目录（第二个参数：有写的权限（只对 Linux 系统)）
+            mkdir($url, 0777);
+        }
+        move_uploaded_file($img['tmp_name'],$url.$i);
+        $redis = \libs\Redis::gitInstance();
+        $uploadedCount = $redis->incr($name);
+        if($uploadedCount == $count){
+             // 以追回的方式创建并打开最终的大文件
+             $fp = fopen(ROOT.'public/uploads/big/'.$name.'.png', 'a');
+             // 循环所有的分片
+             for($i=0; $i<$count; $i++)
+             {
+                 // 读取第 i 号文件并写到大文件中
+                 fwrite($fp, file_get_contents($url.$i));
+                 // 删除第 i 号临时文件
+                 unlink($url.$i);
+            }
+            rmdir(ROOT.'tmp/'.$_SESSION['id']);            
+            fclose($fp);
+            $redis->del($name);
+        }
+    }
+
+    public function uploadall(){
+        $root= ROOT.'public/uploads/';
+        $date = date('Y-m-d');
+        if(!is_dir($root .$date)){
+            mkdir($root.$date,0777);
+        }
+        foreach($_FILES['images']['name'] as $k=>$v){
+            $name = md5(time().rand(1,9999));
+            $ext = strrchr($v,'.');
+            $name = $name.$ext;
+            move_uploaded_file($_FILES['images']['tmp_name'][$k],$root.$date.'/'.$name);
+            echo $root.$date.'/'.$name.'<hr>';
+        }
+     
+    }
+    public function album(){
+        view('users.album');
+    }
+    public function setavatar(){
+        $upload = \libs\Uploader::make();
+        $path = $upload->upload('avatar', 'avatar');
+
+        echo $path;
+    }
+    public function avatar(){
+        view('users.avatar');
+    }
     public function test()
     {
         sleep(100);

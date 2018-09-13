@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+        <?php view('common.nav'); ?>
+    <h1>批量上传</h1>
+
+    <form action="/user/uploadall" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="<?=csrf()?>">
+        <div>
+            选择图片：
+            <input type="file" name="avatar" multiple>
+        </div>
+        <hr>
+        <input type="file" name="images[]">
+        <input type="file" name="images[]">
+        <input type="file" name="images[]">
+        <input type="file" name="images[]">
+        <input type="file" name="images[]">
+        <div>
+            <input type="submit" value="设置头像">
+        </div>
+    </form>
+    <?php view('common.footer'); ?>
+</body>
+</html>
