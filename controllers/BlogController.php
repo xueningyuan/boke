@@ -25,15 +25,26 @@ class BlogController{
             // 取出数据库中的日志
             $model = new \models\Blog;
             // 获取最新的20个日志
-            $blogs = $model->indexTop20();
-    
+            $blogs = $model->search();//日志列表
+            echo "<pre>";
+            // var_dump($blogs);
             $i=2; // 第几行
-            foreach($blogs as $v)
-            {
-                $sheet->setCellValue('A'.$i, $v['title']);
-                $sheet->setCellValue('B'.$i, $v['content']);
-                $sheet->setCellValue('C'.$i, $v['created_at']);
-                $sheet->setCellValue('D'.$i, $v['is_show']);
+            // foreach($blogs as $v)
+            // {
+            //     $sheet->setCellValue('A'.$i, $v['title']);
+            //     $sheet->setCellValue('B'.$i, $v['content']);
+            //     $sheet->setCellValue('C'.$i, $v['created_at']);
+            //     $sheet->setCellValue('D'.$i, $v['is_show']);
+            //     var_dump($v['title']);
+                
+            //     $i++;
+            // }
+            for($k=0;$k<count($blogs['data']);$k++)
+            {   
+                $sheet->setCellValue('A'.$i, $blogs['data'][$k]['title']);
+                $sheet->setCellValue('B'.$i, $blogs['data'][$k]['content']);
+                $sheet->setCellValue('C'.$i, $blogs['data'][$k]['created_at']);
+                $sheet->setCellValue('D'.$i, $blogs['data'][$k]['is_show']);
                 $i++;
             }
     
