@@ -8,6 +8,55 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class BlogController{
 
+    public function agreements_list()
+    {
+        $id = $_GET['id'];
+
+        // 获取这个日志所有点赞的用户
+        $model = new \models\Blog;
+        $data = $model->agreeList($id);
+
+        // 转成 JSON 返回 
+        echo json_encode([
+            'status_code' => 200,
+            'data' => $data,
+        ]);
+
+    }
+
+    // 点赞
+    public function agreements()
+    {
+        $id = $_GET['id'];
+        // 判断登录
+        if(!isset($_SESSION['id']))
+        {
+            echo json_encode([
+                'status_code' => '403',
+                'message' => '必须先登录'
+            ]);
+            exit;
+        }
+
+        // 点赞
+        $model = new \models\Blog;
+        $ret = $model->agree($id);
+        if($ret)
+        {
+            echo json_encode([
+                'status_code' => '200',
+            ]);
+            exit;
+        }
+        else
+        {
+            echo json_encode([
+                'status_code' => '403',
+                'message' => '已经点赞过了'
+            ]);
+            exit;
+        }
+    }
         // 获取最新的10个日志
     public function makeExcel()
     {

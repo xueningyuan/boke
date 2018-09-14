@@ -5,6 +5,13 @@ use PDO;
 
 
 class User extends Base{
+    public function setAvatar($path){
+        $stmt = self::$pdo->prepare('update users set avatar=? where id =?');
+        $stmt->execute([
+            $path,
+            $_SESSION['id']
+        ]);
+    }
     public function add($email,$password){
         $stmt = self::$pdo->prepare("insert into users (email,password) values(?,?)");
         return $stmt->execute([
@@ -23,6 +30,7 @@ class User extends Base{
             $_SESSION['id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['money'] = $user['money'];
+            $_SESSION['avatar']= $user['avatar'];
             return true;
         }
         else
@@ -61,6 +69,12 @@ class User extends Base{
 
     }
 
+    public function getAll()
+    {
+        $stmt = self::$pdo->query('SELECT * FROM users');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 
 
 

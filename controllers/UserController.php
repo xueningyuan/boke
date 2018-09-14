@@ -62,7 +62,13 @@ class UserController
         $upload = \libs\Uploader::make();
         $path = $upload->upload('avatar', 'avatar');
 
-        echo $path;
+        $model =new \models\User;
+        $model->setAvatar('/uploads/'.$path);
+        // echo $path;
+        @unlink(ROOT.'public'.$_SESSION['avatar']);
+
+        $_SESSION['avatar'] = '/uploads/'.$path;
+        message('设置成功',2,'/blog/index');
     }
     public function avatar(){
         view('users.avatar');
