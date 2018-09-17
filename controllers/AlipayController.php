@@ -16,9 +16,9 @@ class AlipayController
         'private_key' => 'MIIEowIBAAKCAQEA4xspCIhE+hMLKjJc19y4psoqupXsLXlP9CUDOsYvppkDLp2E3LBrVSVogw2coh2KqeMjAQ/BB+PJ8IpkeAk1wE4KAdmA0FnCGmq8qZlESzf73zLKmCqRoX5QwElz2cBEhQrk3UnArZ2GTj3jfCZUdbusce6uEdI9DW9Agw1zouTQmckuKo59IEF6hXUivMFL6eh6V7z9gFUn82Wt62E1jKp7kYjpYHRLO8mQUHOQ4HC6ThASIiQgMNXGOGULRsXgKIK2DeV9fnL+JkN7VfL9GZ1UhuKwjbvtCCpX8OKhbFEm91wu/SbcaajRIP3fe4aY4zK+2k+wvIpOjcZKTheFswIDAQABAoIBACA838NFTL1O7LvNsF44B8ItWoln9MGzwcS/aEj0jxkQCWKZm52UMXhBuic4TG660M8y3eotqVIMZMMPchmT/RxSN5txm5Z311TWp/dPOWGQDeHuHNIi4M9S1fWlt5tGbrOQC1LaQE6k2MbMhDlAW6bmwCDgJ7eB54a7ryWrSCnsGrekfmQz9joIM/1Xl4MdZlORigR3pcmvPCUMA2xB1QOX1qn2R1sYJXg7D6uJBbEw2TPYj81hjpa6Sal/Y6ZX4cInI6UasYv8ShcFKbous401FrsdbA/NgFsuXQOD/I4aDJcBpV9sAyf4ngCGLJ+QWKQE+aSQOrSIYXMS7ZioUNkCgYEA8kVkxOcxzavw1ha6CVdYtJcQHHD0bHKC9y+GvDSPHz5M0UKyYedw5v2u9hhHfw6sYNyj91jPe+4NrKBvam/pLuvbHf9tbW1+5M6B+A5hJ8SOnXzTtu4Ry+LXN3dgGrd7XCULYo9n4mvotZiisqgliGLB5iGN9ciXV8SKZdwJRw0CgYEA7/nFBqWefyIGO6gP9/9RtiUIChTbmiAz1D3orDI7XRIbAnQgYPb6EzESwzRwK6AcEOLwx1NvATV3YQI7jCczNMWkYULvv4ekpwZEpJ8z5Ojy+oIBWUwv3NPL7O/PTKsh1T/UrpHd1fh5I6yQo3aIxG6Qjn2mz27Qihreln+Yz78CgYBKs/sOe/tvX8UzPm6+0qAXjzz4iBvWFLktXwo8njhDegJVxCsc5TB7CV4ZpALnuq6Mb3xfmJLhs9WjlRTFzRwpy7AU393uEAVAqCyLQGPUz1bqWMMvdNkn9RpHkBeiJVF0aDfKfE2cE4n99MK2NALeuxTu0Qnk76U6+u9x2RdDQQKBgQCwmHmpXo+4tu0nUZIOylDzXWUBJkBEt5XshnKG5aBR6VT/BT4enSGCpgZMqHYzZGvC8X6G8JsrpJDpTp9LkD1ahGdnO776j3NXhoFVM+MYfWTxfGJJuIswUpwrDH7cyMLpD0QQAz/gii17Vy5JXJ1hEIxIj6cF12KXfxZ2YgeuOQKBgHa8cCBr34/2iGUw1jQlL1xkIQpqMiso+lurt2NlaBHzrU1E546QPUU6FdoBVjznpQtDSTijCg3SRW0dZBLviToIjTevMY9G7W2X9kTcmnQtEPAcRw3aWGZPtGeZ6menSsYzZ5Kcpg3zrsHITZBPW3jkHJ5BWHb93rWLTyLyci/g',
         
         // 通知地址
-        'notify_url' => 'http://xue.tunnel.echomod.cn/alipay/notify',
+        'notify_url' => 'http://dfce8b3a.ngrok.io/alipay/notify',
         // 跳回地址
-        'return_url' => 'http://xue.tunnel.echomod.cn/alipay/return',
+        'return_url' => 'http://dfce8b3a.ngrok.io/alipay/return',
         
         // 沙箱模式（可选）
         'mode' => 'dev',
@@ -110,18 +110,18 @@ class AlipayController
 
             if($ret->code == 10000)
             {
-                
-                $order->startTrans();
-
                 $orders = new \models\Order;
+                $orders->startTrans();
+
+
                 $ret1 = $orders->setpayout($sn);
                 $user = new \models\User;
                 $ret2 = $user->abbMoney($money,$_SESSION['id']);
 
                 if($ret1 && $ret2){
-                    $order->commit();
+                    $orders->commit();
                 }else{
-                    $order->rollback();
+                    $orders->rollback();
                 }
                 echo '退款成功！信息更新成功';    
             }

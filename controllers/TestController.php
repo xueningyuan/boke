@@ -1,8 +1,16 @@
 <?php
 namespace controllers;
 
+use Intervention\Image\ImageManagerStatic as Image;
+
+
 class TestController
 {   
+    public function textImage(){
+        $image = Image::make(ROOT.'public/uploads/2.jpg');
+        $image->insert(ROOT.'public/uploads/water.png','top_right');
+        $image->save(ROOT.'public/uploads/big_water.png');
+    }
     public function testaddMondey(){
         $user = new \models\User;
         $user->addMoney(2,21);
