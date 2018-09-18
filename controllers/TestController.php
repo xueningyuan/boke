@@ -6,6 +6,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class TestController
 {   
+    
     public function textImage(){
         $image = Image::make(ROOT.'public/uploads/2.jpg');
         $image->insert(ROOT.'public/uploads/water.png','top_right');
