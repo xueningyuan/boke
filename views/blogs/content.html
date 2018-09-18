@@ -203,7 +203,7 @@ $.ajax({
             axios.get('/comment/comment_list?id='+id)
                 .then(res => {   
                     if(res.data.status_code == 200){
-                        alert('200');
+                        // alert('200');
                         this.comments=res.data.data
                     }
                     
