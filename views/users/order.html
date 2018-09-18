@@ -44,6 +44,11 @@
                     <input type="hidden" name="sn" value="<?=$v['sn']?>">
                     <input type="submit" value="微信支付">
                 </form>
+                <form action="/test/del" method="post">
+                    <?=csrf_field()?>
+                    <input type="hidden" name="sn" value="<?=$v['sn']?>">
+                    <input type="submit" value="删除">
+                </form>
                 <?php endif; ?>
                 <?php if($v['status']==1): ?>
                 <form target="_blank" action="/alipay/refund" method="post">
@@ -57,6 +62,13 @@
                     <input type="hidden" name="sn" value="<?=$v['sn']?>">
                     <input type="hidden" name="money" value="<?=$v['money']?>">
                     <input type="submit" value="微信退款">
+                </form>
+                <?php endif; ?>
+                <?php if($v['status']==2): ?>
+                <form action="/test/del" method="post">
+                    <?=csrf_field()?>
+                    <input type="hidden" name="sn" value="<?=$v['sn']?>">
+                    <input type="submit" value="删除">
                 </form>
                 <?php endif; ?>
             </td>

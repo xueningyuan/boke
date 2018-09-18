@@ -84,4 +84,11 @@ class TestController
 
         var_dump("ok");
     }
+
+    public function del(){
+        $sn = $_POST['sn'];
+        $order = new \models\Order;
+        $order->del($sn);
+        message('删除成功', 2, '/user/orders');
+    }
 }

@@ -92,6 +92,15 @@ class Order extends Base{
     }
 
 
+    public function del($sn){
+        $stmt = self::$pdo->prepare("delete from orders where sn = ? and user_id=? ");
+        $stmt->execute([
+            $sn,
+            $_SESSION['id']
+        ]);
+    }
+
+
 
 
 
