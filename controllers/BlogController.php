@@ -203,17 +203,25 @@ class BlogController{
         $blog->index2html();
     }
 
-    public function update_display(){
+    public function display()
+    {
+        // 接收日志ID
         $id = (int)$_GET['id'];
 
         $blog = new Blog;
 
-        $display = $blog->getDisplay($id);
+        // 把浏览量+1，并输出（如果内存中没有就查询数据库，如果内存中有直接操作内存）
+        $display =  $blog->getDisplay($id);
+
+        // 返回多个数据时必须要用 JSON
 
         echo json_encode([
             'display' => $display,
-            'email' => isset($_SESSION['email']) ? $_SESSION['email'] : ''
+            'email' => isset($_SESSION['email']) ? $_SESSION['email'] : '',
+            'money' => $_SESSION['money'],
+            'avatar' => $_SESSION['avatar']=='' ? '/images/avatar.jpg' : $_SESSION['avatar'],
         ]);
+        
     }
 
     public function displayToDb(){
