@@ -21,22 +21,24 @@ class Blog extends Base {
        return $stmt->fetchAll( PDO::FETCH_ASSOC );
     }
     public function agree($id){
-        $stmt = self::$pdo->prepare('select count(*) from blog_agrees where user_id=? and blog_id=?');
+        // 判断是否点过
+        $stmt = self::$pdo->prepare('SELECT COUNT(*) FROM blog_agrees WHERE user_id=? AND blog_id=?');
         $stmt->execute([
             $_SESSION['id'],
             $id
         ]);
-        $count = $stmt->fetch(PDO::FETCH_COLUMN);
-        if($count == 1){
+        $count = $stmt->fetch( PDO::FETCH_COLUMN );
+        if($count == 1)
+        {
             return FALSE;
         }
+
         // 点赞
         $stmt = self::$pdo->prepare("INSERT INTO blog_agrees(user_id,blog_id) VALUES(?,?)");
         $ret = $stmt->execute([
             $_SESSION['id'],
             $id
         ]);
-
         // 更新点赞数
         if($ret)
         {
